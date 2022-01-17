@@ -82,7 +82,6 @@ meta_snp_effects$N <- as.numeric(meta_snp_effects$N)
 
 
 sum((meta_snp_effects$p_value < (0.05/meta_snp_effects$N)) == TRUE )
-
 cleaned_meta_snp_effects <- meta_snp_effects[meta_snp_effects$p_value < (0.05/meta_snp_effects$N),]
 
 
@@ -97,13 +96,12 @@ nrow(ordered_meta_snp_effects)
 #3. Plotting if results
 gsub("\\-.*", "", cleaned_meta_snp_effects$pairs)
 ordered_meta_snp_effects$meta <- gsub("\\-.*", "", ordered_meta_snp_effects$pairs)
-View(ordered_meta_snp_effects)
+
 
 best_related_pairs <- ordered_meta_snp_effects %>% group_by(snp_id) %>% top_n(-1,p_value)
 the_best <- best_related_pairs[which.min(best_related_pairs$p_value),]
 
 
-gsub(".*-", "", ordered_meta_snp_effects$pairs)
 ordered_meta_snp_effects$snp_id <- gsub(".*-", "", ordered_meta_snp_effects$pairs)
 best_pair <- meta_data_v2 %>% select(GENDER,SNP_rs2066938,C4)
 best_pair$SNP_rs2066938 <- as.character(best_pair$SNP_rs2066938)
@@ -111,11 +109,13 @@ best_pair$GENDER <- as.character(best_pair$GENDER)
 
 ggplot(best_pair %>% filter(!is.na(SNP_rs2066938)), aes(SNP_rs2066938, C4))+
   geom_boxplot(na.rm = T)+
-  facet_wrap(~GENDER)
+  facet_wrap(~GENDER)+
+  labs(x = "SNP_rs2066938 (p-value: 9.81e-99)")
 
 ggplot(best_pair %>% filter(!is.na(SNP_rs2066938)), aes(SNP_rs2066938, C4))+
-  geom_quasirandom(na.rm = T, aes(color = GENDER))
+  geom_quasirandom(na.rm = T, aes(color = GENDER))+
+  labs(x = "SNP_rs2066938 (p-value: 9.81e-99)")
 
 #4. Biological context of results/ resporing of results
-#C4 (Biocrates, P = 2.9×10???44) = butyrylcarnitine (Metabolon, P = 1.75×10???114)
+#C4 (Biocrates, P = 2.9Ã—10???44) = butyrylcarnitine (Metabolon, P = 1.75Ã—10???114)
 
